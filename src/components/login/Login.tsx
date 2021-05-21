@@ -24,7 +24,9 @@ function Login() {
   const [valuePassword, setValuePassword] = useState("");
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorPassWord, setErrorPassWord] = useState(false);
+  const [btnLoading, setBtnLoading] = useState(false);
   async function SignIn() {
+    setBtnLoading(true)
     try{
       const result:any = await api.post('/sessions',{email:valueEmail, password: valuePassword})
       console.log(`result`, result)
@@ -33,10 +35,12 @@ function Login() {
       setToken({ token: "1234" });
       localStorage.setItem('id', result.data.id)
       history.push(`/list`);
+      setBtnLoading(false)
     }catch(err){
       console.log(`err`, err)
       setErrorPassWord(true);
       setErrorEmail(true);
+      setBtnLoading(false)
     }
   }
   return (
@@ -73,7 +77,7 @@ function Login() {
               onChange={(e) => setValuePassword(e.target.value)}
             />
           </Form.Field>
-          <Form.Field control={ButtonContainerRight} data-testid="btnLogin">
+          <Form.Field control={ButtonContainerRight} data-testid="btnLogin" loading={btnLoading} style={{display:"flex"}}>
             Entrar
           </Form.Field>
           <ButtonContainerRighMobile onClick={()=> history.push('/register')}>Cadastre-se</ButtonContainerRighMobile>

@@ -37,6 +37,7 @@ function Register({ match }: RouteComponentProps<TParams>) {
   const [valuePassword, setValuePassword] = useState("");
   const [ErrorCep, setErroCep] = useState(false);
   const [ErrorCPF, setErrorCPF] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const notify = () =>
     toast.success("item add with success!", {
@@ -89,11 +90,13 @@ function Register({ match }: RouteComponentProps<TParams>) {
         whatsapp: valueWhatsApp.replace(/[^a-z0-9]/gi,''),
       };
       try{
+        setButtonLoading(true)
         const result = await api.post("/citizen", userToAdd);
         console.log(`result`, result)
         history.push('/')
+        setButtonLoading(false)
       }catch(err){
-        
+        setButtonLoading(false)
       }
     }
   }
@@ -274,6 +277,7 @@ function Register({ match }: RouteComponentProps<TParams>) {
               <Form.Field
                 control={ButtonContainerLeft}
                 onClick={() => verifyCepAndCpf()}
+                loading={buttonLoading}
               >
                 Crie sua conta
               </Form.Field>

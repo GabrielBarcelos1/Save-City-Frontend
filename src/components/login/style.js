@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Form } from "semantic-ui-react";
+import { Form, Button} from "semantic-ui-react";
 
 export const MajorContainer = styled.div`
   width: 100vw;
@@ -45,24 +45,24 @@ export const H1ContainerRight = styled.h1`
   color: #58af9c;
   font-weight: 700;
 `;
-export const ButtonContainerRight = styled.button`
+export const ButtonContainerRight = styled(Button)`
   border: 0;
   outline: 0;
-  margin: 10px auto;
-  margin-top: 30px;
-  color: white;
-  font-weight: 600;
-  background-color: #58af9c;
-  width: 250px;
-  height: 40px;
-  border-radius: 70px;
+  margin: 10px auto !important;
+  margin-top: 30px !important;
+  color: white !important;
+  font-weight: 600 !important;
+  background-color: #58af9c !important;
+  width: 250px !important;
+  height: 40px !important;
+  border-radius: 70px !important;
   display: flex;
   justify-content: center;
   align-items: center;
   &:hover {
-    border: 1px solid #58af9c;
-    color: #58af9c;
-    background-color: white;
+    border: 1px solid #58af9c !important;
+    color: #58af9c !important;
+    background-color: white !important;
     transition: 0.15s;
   }
 `;

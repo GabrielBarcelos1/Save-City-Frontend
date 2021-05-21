@@ -1,4 +1,4 @@
-import { Container } from "semantic-ui-react";
+import { Container,Button } from "semantic-ui-react";
 import styled from "styled-components";
 
 export const MajorContainer = styled.div`
@@ -113,23 +113,24 @@ export const ButtonContainerMobile = styled.div`
     display: none;
   }
 `;
-export const ButtonContainerLeft = styled.button`
-  margin-top: 30px;
-  color: white;
-  font-weight: 600;
-  background-color: #58af9c;
-  width: 250px;
-  height: 40px;
-  border-radius: 70px;
+export const ButtonContainerLeft = styled(Button)`
+   border: 0;
+  outline: 0;
+  margin: 10px auto !important;
+  margin-top: 30px !important;
+  color: white !important;
+  font-weight: 600 !important;
+  background-color: #58af9c !important;
+  width: 250px !important;
+  height: 40px !important;
+  border-radius: 70px !important;
   display: flex;
   justify-content: center;
   align-items: center;
-  outline: 0;
-  border: 0;
   &:hover {
-    border: 1px solid #58af9c;
-    color: #58af9c;
-    background-color: white;
+    border: 1px solid #58af9c !important;
+    color: #58af9c !important;
+    background-color: white !important;
     transition: 0.15s;
   }
   @media (max-width: 780px) {

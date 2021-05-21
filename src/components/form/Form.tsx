@@ -36,6 +36,7 @@ function AddItem({ match }: RouteComponentProps<TParams>) {
   const [valueNum, setValueNum] = useState("");
   const [ErrorCep, setErroCep] = useState(false);
   const [ErrorCPF, setErrorCPF] = useState(false);
+  const [loadingButton, setLoadingButton] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const notify = () =>
     toast.success("item add with success!", {
@@ -100,7 +101,7 @@ function AddItem({ match }: RouteComponentProps<TParams>) {
       
     }
   }
-  function addInfosToDb() {
+  async function addInfosToDb() {
     if (
       !valueCep.endsWith("_") &&
       verifyCepAndCpf()
@@ -116,19 +117,26 @@ function AddItem({ match }: RouteComponentProps<TParams>) {
         number: valueNum,
 
       };
-      api.post("/incidents", incidentToAdd, {
-        headers: {
-          'Authorization': localStorage.getItem('id')
-        }} );
-      notify();
-      setValueTitle("");
-      setValueCep("");
-      setValueDescription("");
-      setValueEmail("");
-      setValueStreet("");
-      setValueCity("");
-      setValueDistrict("");
-      setValueNum("");
+
+      try{
+        setLoadingButton(true)
+        await api.post("/incidents", incidentToAdd, {
+          headers: {
+            'Authorization': localStorage.getItem('id')
+          }} );
+          setValueTitle("");
+          setValueCep("");
+          setValueDescription("");
+          setValueEmail("");
+          setValueStreet("");
+          setValueCity("");
+          setValueDistrict("");
+          setValueNum("");
+          setLoadingButton(false)
+      }catch(err){
+          setLoadingButton(false)
+      }
+     
     }
   }
   function editInfosDb() {
@@ -173,7 +181,6 @@ function AddItem({ match }: RouteComponentProps<TParams>) {
   return (
     <MajorContainer>
       <ContainerLeft>
-        {console.log(`id`, localStorage.getItem('id'))}
         <ContainerIconLogout>
           <Link to="/" onClick={() => localStorage.clear()}>
             <MinorContainerIconLogout>
@@ -287,6 +294,7 @@ function AddItem({ match }: RouteComponentProps<TParams>) {
               <Form.Field
                 control={ButtonContainerLeft}
                 onClick={() => verifyCepAndCpf()}
+                loading={loadingButton}
               >
                 {!match?.params?.id
                   ? "Adicionar a sugestão"
