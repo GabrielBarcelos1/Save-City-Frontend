@@ -9,6 +9,9 @@ export const MajorContainer = styled.div`
   align-items: center;
   justify-content: flex-start;
   background-color: #58af9c;
+  @media (max-height: 832px) {
+    height: 100%;
+  }
 `;
 
 export const ContainerLeft = styled.div`

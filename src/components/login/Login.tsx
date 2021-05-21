@@ -10,6 +10,7 @@ import {
   ButtonContainerRight,
   ButtonContainerLeft,
   FormContainerRight,
+  ButtonContainerRighMobile
 } from "./style";
 import { Form } from "semantic-ui-react";
 import StoreContext from "../../store/Context";
@@ -75,6 +76,7 @@ function Login() {
           <Form.Field control={ButtonContainerRight} data-testid="btnLogin">
             Entrar
           </Form.Field>
+          <ButtonContainerRighMobile onClick={()=> history.push('/register')}>Cadastre-se</ButtonContainerRighMobile>
         </FormContainerRight>
       </ContainerRight>
     </MajorContainer>

@@ -92,3 +92,26 @@ export const FormContainerRight = styled(Form)`
     width: 80%;
   }
 `;
+export const ButtonContainerRighMobile = styled.button`
+  display:none;
+  @media (max-width: 600px) {
+    border: 0;
+  outline: 0;
+  margin: 10px auto;
+  color: white;
+  font-weight: 600;
+  background-color: #58af9c;
+  width: 250px;
+  height: 40px;
+  border-radius: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid white;
+  &:hover {
+    background-color: white;
+    color:#58af9c;
+    transition: 0.15s;
+  }
+  }
+`;

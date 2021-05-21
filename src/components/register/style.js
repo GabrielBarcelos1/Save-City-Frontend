@@ -9,6 +9,9 @@ export const MajorContainer = styled.div`
   align-items: center;
   justify-content: flex-start;
   background-color: #58af9c;
+  @media (max-height: 832px) {
+    height: 100%;
+  }
 `;
 
 export const ContainerLeft = styled.div`
@@ -134,7 +137,7 @@ export const ButtonContainerLeft = styled.button`
   }
 `;
 export const ContainerIconLogout = styled.div`
-  width: 80%;
+  width: 95%;
   margin-top: 30px;
   display: flex;
   align-items: center;
