@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState,useRef } from "react";
 import {
   MajorContainer,
   ContainerForm,
@@ -11,15 +11,12 @@ import {
   ButtonContainerRight,
   ButtonContainerLeft,
   ContainerIconLogout,
-  MinorContainerIconLogout,
   ButtonContainerMobile,
 } from "./style";
 import { Form } from "semantic-ui-react";
 import InputMask from "react-input-mask";
 import { viacep, api } from "../../services/api";
 import { Link, RouteComponentProps, useHistory } from "react-router-dom";
-import { RiLogoutBoxLine } from "react-icons/ri";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 type TParams = { id: string };
@@ -39,16 +36,6 @@ function Register({ match }: RouteComponentProps<TParams>) {
   const [ErrorCPF, setErrorCPF] = useState(false);
   const [buttonLoading, setButtonLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const notify = () =>
-    toast.success("item add with success!", {
-      position: "bottom-left",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-    });
 
   async function validateCep(value: string) {
     setValueCep(value);
@@ -294,17 +281,6 @@ function Register({ match }: RouteComponentProps<TParams>) {
           <ButtonContainerRight>Já tenho uma conta</ButtonContainerRight>
         </Link>
       </ContainerRight>
-      <ToastContainer
-        position="bottom-left"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </MajorContainer>
   );
 }

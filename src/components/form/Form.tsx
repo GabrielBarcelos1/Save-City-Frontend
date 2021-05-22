@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef,useContext } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import {
   MajorContainer,
   ContainerForm,
@@ -14,7 +14,7 @@ import {
   MinorContainerIconLogout,
   ButtonContainerMobile,
 } from "./style";
-import { Form } from "semantic-ui-react";
+import { Form, Dropdown} from "semantic-ui-react";
 import InputMask from "react-input-mask";
 import { viacep, api } from "../../services/api";
 import { Link, RouteComponentProps, useHistory } from "react-router-dom";
@@ -24,43 +24,41 @@ import "react-toastify/dist/ReactToastify.css";
 
 type TParams = { id: string };
 function AddItem({ match }: RouteComponentProps<TParams>) {
+  const dropDownOptions = [
+    {
+      key: 'casan',
+      text: 'Água ou esgoto',
+      value: 'casan',
+    },
+    {
+      key: 'celesc',
+      text: 'Eletrecidade',
+      value: 'celesc',
+    },
+    {
+      key: 'comcap',
+      text: 'Lixo na cidade',
+      value: 'comcap',
+    },
+    {
+      key: 'nenhum',
+      text: 'Nenhuma das alternativas',
+      value: 'nenhum',
+    },
+  ]
 
   const history = useHistory();
   const [valueTitle, setValueTitle] = useState("");
   const [valueCep, setValueCep] = useState("");
   const [valueDescription, setValueDescription] = useState("");
-  const [valueEmail, setValueEmail] = useState("");
   const [valueStreet, setValueStreet] = useState("");
   const [valueCity, setValueCity] = useState("");
   const [valueDistrict, setValueDistrict] = useState("");
   const [valueNum, setValueNum] = useState("");
+  const [valueType, setValueType] = useState("");
   const [ErrorCep, setErroCep] = useState(false);
-  const [ErrorCPF, setErrorCPF] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const notify = () =>
-    toast.success("item add with success!", {
-      position: "bottom-left",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-    });
-  const notifyEdit = () =>
-    toast.success(
-      "item edited with success, you are being redirected you to the listing page",
-      {
-        position: "bottom-left",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: false,
-        draggable: false,
-        progress: undefined,
-      }
-    );
 
   useEffect(() => {
     async function getData() {
@@ -77,6 +75,7 @@ function AddItem({ match }: RouteComponentProps<TParams>) {
         setValueCity(data.city);
         setValueDistrict(data.district);
         setValueNum(data.number);
+        setValueType(data.type)
       } catch (err) {}
     }
     getData();
@@ -110,6 +109,7 @@ function AddItem({ match }: RouteComponentProps<TParams>) {
       let incidentToAdd = {
         title: valueTitle,
         description: valueDescription,
+        type: valueType,
         cep: cepParsed,
         city: valueCity,
         street: valueStreet,
@@ -120,26 +120,20 @@ function AddItem({ match }: RouteComponentProps<TParams>) {
 
       try{
         setLoadingButton(true)
+        console.log(`incidentToAdd`, incidentToAdd)
         await api.post("/incidents", incidentToAdd, {
           headers: {
             'Authorization': localStorage.getItem('id')
           }} );
-          setValueTitle("");
-          setValueCep("");
-          setValueDescription("");
-          setValueEmail("");
-          setValueStreet("");
-          setValueCity("");
-          setValueDistrict("");
-          setValueNum("");
           setLoadingButton(false)
+          history.push('/list')
       }catch(err){
           setLoadingButton(false)
       }
      
     }
   }
-  function editInfosDb() {
+  async function editInfosDb() {
     if (
       !valueCep.endsWith("_") &&
       verifyCepAndCpf()
@@ -147,6 +141,7 @@ function AddItem({ match }: RouteComponentProps<TParams>) {
       let cepParsed = parseValue(valueCep);
       const incidentToEdit = {
         title: valueTitle,
+        type: valueType,
         description: valueDescription,
         cep: cepParsed,
         city: valueCity,
@@ -155,15 +150,16 @@ function AddItem({ match }: RouteComponentProps<TParams>) {
         number: valueNum,
         }
       try{
-        api.put(`/incident/${match?.params?.id}`,incidentToEdit,{
+        setLoadingButton(true)
+        await api.put(`/incident/${match?.params?.id}`,incidentToEdit,{
           headers: {
             'Authorization': localStorage.getItem("id")
           }});
+          setLoadingButton(false)
+          history.push("/list")
       }catch(err){
-
+        setLoadingButton(false)
       }
-      notifyEdit();
-      setTimeout(() => history.push("/list"), 5000);
     }
   }
   function parseValue(cep: string) {
@@ -176,6 +172,9 @@ function AddItem({ match }: RouteComponentProps<TParams>) {
       return false;
     }
     return true;
+  }
+  function handleChangeDropdownType(value:any, _:any){
+    setValueType(_.value)
   }
 
   return (
@@ -201,7 +200,7 @@ function AddItem({ match }: RouteComponentProps<TParams>) {
               }
             >
               <Form.Group widths="equal">
-                <Form.Field required>
+                <Form.Field required >
                   <label>Titulo</label>
                   <input
                     data-testid="inputName"
@@ -212,7 +211,22 @@ function AddItem({ match }: RouteComponentProps<TParams>) {
                     }
                   ></input>
                 </Form.Field>
+                <Form.Field 
+                  control={Dropdown}
+                  placeholder="Tipo"
+                  fluid
+                  selection
+                  options={dropDownOptions}
+                  label="O seu problema te a ver com :"
+                  required
+                  value={valueType}
+                  onChange={handleChangeDropdownType}
+                >
+                </Form.Field>
               </Form.Group>
+           
+
+              
               <Form.Field required>
                 <label>Descrição</label>
                 <textarea 
@@ -223,6 +237,7 @@ function AddItem({ match }: RouteComponentProps<TParams>) {
                     setValueDescription(e.target.value)
                   }
                   value={valueDescription}
+                  maxLength={700}
                 ></textarea >
               </Form.Field>
               <Form.Group widths="equal">

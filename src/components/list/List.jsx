@@ -10,22 +10,19 @@ import {
   H1List,
   ContainerIconLogout,
   MinorContainerIconLogout,
-  InputSearch,
-  MenuSearchContainer,
-  MenuOptionsContainer,
   ButtonContainerMobile,
 } from "./style";
 import {
   AiOutlineEdit,
   AiOutlineDelete,
-  AiOutlineSearch,
 } from "react-icons/ai";
 import { api } from "../../services/api";
 import { Link, useHistory } from "react-router-dom";
-import { Icon, Menu, Table, Dropdown } from "semantic-ui-react";
+import { Table } from "semantic-ui-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RiLogoutBoxLine } from "react-icons/ri";
+import { Circles } from 'react-loading-icons'
 
 
 function List() {
@@ -87,13 +84,18 @@ function List() {
     setEndUrl(5);
     setRefreshSearch(true);
   }
-  function deleteItem(id) {
-    setRefreshSearch(true);
-    notify();
-    api.delete(`/incidents/${id}`,{
-      headers: {
-        'Authorization': localStorage.getItem('id')
-      }});
+  async function deleteItem(id) {
+    try{
+      await api.delete(`/incidents/${id}`,{
+        headers: {
+          'Authorization': localStorage.getItem('id')
+        }});
+        setRefreshSearch(true);
+        notify();
+    }catch(err){
+      console.log(err)
+    }
+   
   }
   function changeOption(value) {
     switch (value) {
@@ -156,10 +158,10 @@ function List() {
                 arrayItens.map((item) => {
                   return (
                     <Table.Row key={item.id}>
-                      <Table.Cell>{item.title}</Table.Cell>
+                      <Table.Cell>{item.title.length>20 ? item.title.substr(0,20)+ "..." : item.title}</Table.Cell>
                       <Table.Cell>{item.description.length>20 ? item.description.substr(0,20)+ "..." : item.description}</Table.Cell>
-                      <Table.Cell>{item.city}</Table.Cell>
-                      <Table.Cell>{item.cep}</Table.Cell>
+                      <Table.Cell>{item.city.length>20 ? item.city.substr(0,20)+ "..." : item.city}</Table.Cell>
+                      <Table.Cell>{item.cep.length>20 ? item.cep.substr(0,20)+ "..." : item.cep}</Table.Cell>
 
                       <Table.Cell
                         onClick={() => history.push(`/edit/${item.id}`)}
@@ -167,14 +169,13 @@ function List() {
                         <AiOutlineEdit size={22} color="#58AF9C" />
                       </Table.Cell>
 
-                      <Table.Cell onClick={() => deleteItem(item.id)}>
+                      <Table.Cell onClick={() => deleteItem(item.id)} loading>
                         <AiOutlineDelete size={22} color="red" />
                       </Table.Cell>
                     </Table.Row>
                   );
                 })}
             </Table.Body>
-
             {/* <Table.Footer>
               <Table.Row>
                 <Table.HeaderCell colSpan="6">
