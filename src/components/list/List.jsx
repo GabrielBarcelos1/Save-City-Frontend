@@ -22,7 +22,6 @@ import { Table } from "semantic-ui-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RiLogoutBoxLine } from "react-icons/ri";
-import { Circles } from 'react-loading-icons'
 
 
 function List() {
