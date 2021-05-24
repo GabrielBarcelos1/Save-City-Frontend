@@ -11,6 +11,11 @@ import {
   ContainerIconLogout,
   MinorContainerIconLogout,
   ButtonContainerMobile,
+  ContainerLeftSearchEmpty,
+  H1ContainerSearchEmpty,
+  TextContainerSaerchEmpty,
+  AiOutlineArrowUpStyled,
+  AiOutlineArrowLeftStyled
 } from "./style";
 import {
   AiOutlineEdit,
@@ -48,6 +53,7 @@ function List() {
   const [valueSearch, setValueSearch] = useState("");
   const [refreshSearch, setRefreshSearch] = useState(false);
   const [valueSort, setValueSort] = useState("");
+  const [searchCompleted, setSearchCompleted] = useState(false);
   useEffect(() => {
     async function pickClients() {
       setRefreshSearch(false);
@@ -59,8 +65,9 @@ function List() {
       const { data } = await api.get(`/profile`, {
         headers: {
           'Authorization': localStorage.getItem("id")
-        }});
-
+        }
+      });
+      setSearchCompleted(true)
       SetarrayItens(data);
     }
     pickClients();
@@ -84,17 +91,18 @@ function List() {
     setRefreshSearch(true);
   }
   async function deleteItem(id) {
-    try{
-      await api.delete(`/incidents/${id}`,{
+    try {
+      await api.delete(`/incidents/${id}`, {
         headers: {
           'Authorization': localStorage.getItem('id')
-        }});
-        setRefreshSearch(true);
-        notify();
-    }catch(err){
+        }
+      });
+      setRefreshSearch(true);
+      notify();
+    } catch (err) {
       console.log(err)
     }
-   
+
   }
   function changeOption(value) {
     switch (value) {
@@ -117,12 +125,11 @@ function List() {
 
   return (
     <MajorContainer>
-      {console.log(`arrayItens`, arrayItens)}
       <ContainerLeft>
         <H1ContainerLeft>Ajude sua cidade</H1ContainerLeft>
         <TextContainerLeft>
-        Ajude sua cidade adicionando sugestões de melhorias em uma 
-        conexão direta com a prefeitura
+          Ajude sua cidade adicionando sugestões de melhorias em uma
+          conexão direta com a prefeitura
         </TextContainerLeft>
         <Link to="/add">
           <ButtonContainerLeft>Ajude agora</ButtonContainerLeft>
@@ -140,42 +147,56 @@ function List() {
           </Link>
         </ContainerIconLogout>
         <MinorContainerRight>
-          <H1List>Sugestões adicionadas</H1List>
-          <Table celled>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Titulo</Table.HeaderCell>
-                <Table.HeaderCell>Descrição</Table.HeaderCell>
-                <Table.HeaderCell>Cidade</Table.HeaderCell>
-                <Table.HeaderCell>CEP</Table.HeaderCell>
-                <Table.HeaderCell colSpan="2"></Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
+          {arrayItens.length !== 0 && searchCompleted && <>
+            <H1List>Sugestões adicionadas</H1List>
+            <Table celled>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>Titulo</Table.HeaderCell>
+                  <Table.HeaderCell>Descrição</Table.HeaderCell>
+                  <Table.HeaderCell>Cidade</Table.HeaderCell>
+                  <Table.HeaderCell>CEP</Table.HeaderCell>
+                  <Table.HeaderCell colSpan="2"></Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
 
-            <Table.Body>
-              {arrayItens &&
-                arrayItens.map((item) => {
-                  return (
-                    <Table.Row key={item.id}>
-                      <Table.Cell>{item.title.length>20 ? item.title.substr(0,20)+ "..." : item.title}</Table.Cell>
-                      <Table.Cell>{item.description.length>20 ? item.description.substr(0,20)+ "..." : item.description}</Table.Cell>
-                      <Table.Cell>{item.city.length>20 ? item.city.substr(0,20)+ "..." : item.city}</Table.Cell>
-                      <Table.Cell>{item.cep.length>20 ? item.cep.substr(0,20)+ "..." : item.cep}</Table.Cell>
+              <Table.Body>
+                {arrayItens &&
+                  arrayItens.map((item) => {
+                    return (
+                      <Table.Row key={item.id}>
+                        <Table.Cell>{item.title.length > 20 ? item.title.substr(0, 20) + "..." : item.title}</Table.Cell>
+                        <Table.Cell>{item.description.length > 20 ? item.description.substr(0, 20) + "..." : item.description}</Table.Cell>
+                        <Table.Cell>{item.city.length > 20 ? item.city.substr(0, 20) + "..." : item.city}</Table.Cell>
+                        <Table.Cell>{item.cep.length > 20 ? item.cep.substr(0, 20) + "..." : item.cep}</Table.Cell>
 
-                      <Table.Cell
-                        onClick={() => history.push(`/edit/${item.id}`)}
-                      >
-                        <AiOutlineEdit size={22} color="#58AF9C" />
-                      </Table.Cell>
+                        <Table.Cell
+                          onClick={() => history.push(`/edit/${item.id}`)}
+                        >
+                          <AiOutlineEdit size={22} color="#58AF9C" />
+                        </Table.Cell>
 
-                      <Table.Cell onClick={() => deleteItem(item.id)} loading>
-                        <AiOutlineDelete size={22} color="red" />
-                      </Table.Cell>
-                    </Table.Row>
-                  );
-                })}
-            </Table.Body>
-            {/* <Table.Footer>
+                        <Table.Cell onClick={() => deleteItem(item.id)} loading>
+                          <AiOutlineDelete size={22} color="red" />
+                        </Table.Cell>
+                      </Table.Row>
+                    );
+                  })}
+              </Table.Body>
+            </Table>
+          </>}
+          {arrayItens.length === 0 && searchCompleted && <>
+
+            <ContainerLeftSearchEmpty>
+              <H1ContainerSearchEmpty>Voce ainda nao tem sugestões adicionadas</H1ContainerSearchEmpty>
+              <TextContainerSaerchEmpty>
+              Clique no botão ajude agora,para adicionar uma e nos ajudar a fazermos uma cidade melhor para todos
+              </TextContainerSaerchEmpty>
+              <AiOutlineArrowLeftStyled color="#58af9c" size={50}/>
+              <AiOutlineArrowUpStyled color="#58af9c" size={50}/>
+            </ContainerLeftSearchEmpty>
+          </>}
+          {/* <Table.Footer>
               <Table.Row>
                 <Table.HeaderCell colSpan="6">
                   <Menu floated="left" pagination>
@@ -220,7 +241,6 @@ function List() {
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Footer> */}
-          </Table>
         </MinorContainerRight>
       </ContainerRight>
       <ToastContainer
