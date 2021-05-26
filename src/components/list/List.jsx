@@ -156,6 +156,7 @@ function List() {
                   <Table.HeaderCell>Descrição</Table.HeaderCell>
                   <Table.HeaderCell>Cidade</Table.HeaderCell>
                   <Table.HeaderCell>CEP</Table.HeaderCell>
+                  <Table.HeaderCell>Situação</Table.HeaderCell>
                   <Table.HeaderCell colSpan="2"></Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
@@ -169,6 +170,7 @@ function List() {
                         <Table.Cell>{item.description.length > 20 ? item.description.substr(0, 20) + "..." : item.description}</Table.Cell>
                         <Table.Cell>{item.city.length > 20 ? item.city.substr(0, 20) + "..." : item.city}</Table.Cell>
                         <Table.Cell>{item.cep.length > 20 ? item.cep.substr(0, 20) + "..." : item.cep}</Table.Cell>
+                        <Table.Cell>{item.situation}</Table.Cell>
 
                         <Table.Cell
                           onClick={() => history.push(`/edit/${item.id}`)}
@@ -188,7 +190,7 @@ function List() {
           {arrayItens.length === 0 && searchCompleted && <>
 
             <ContainerLeftSearchEmpty>
-              <H1ContainerSearchEmpty>Voce ainda nao tem sugestões adicionadas</H1ContainerSearchEmpty>
+              <H1ContainerSearchEmpty>Você ainda nao tem sugestões adicionadas</H1ContainerSearchEmpty>
               <TextContainerSaerchEmpty>
               Clique no botão ajude agora,para adicionar uma e nos ajudar a fazermos uma cidade melhor para todos
               </TextContainerSaerchEmpty>
