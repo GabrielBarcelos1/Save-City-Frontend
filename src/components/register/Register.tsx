@@ -108,7 +108,7 @@ function Register({ match }: RouteComponentProps<TParams>) {
     <MajorContainer>
       <ContainerLeft>
         <ContainerIconLogout>
-          <Link to="/list">
+          <Link to="/">
             <ButtonContainerMobile>Já tenho uma conta</ButtonContainerMobile>
           </Link>
         </ContainerIconLogout>
