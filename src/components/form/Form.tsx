@@ -193,7 +193,7 @@ function AddItem({ match }: RouteComponentProps<TParams>) {
 
         <MinorContainerLeft>
           <ContainerForm>
-            <H1Form>Formulário</H1Form>
+            <H1Form>Registre sua sugestão</H1Form>
             <Form
               onSubmit={() =>
                 !match?.params?.id ? addInfosToDb() : editInfosDb()

@@ -184,7 +184,6 @@ function Register({ match }: RouteComponentProps<TParams>) {
                   <label>Senha</label>
                   <input
                     type="password"
-                    maxLength={8}
                     data-testid="inputNumber"
                     placeholder="Senha"
                     required
@@ -250,7 +249,6 @@ function Register({ match }: RouteComponentProps<TParams>) {
                   <input
                     ref={inputRef}
                     type="text"
-                    maxLength={8}
                     data-testid="inputNumber"
                     placeholder="Número"
                     required
