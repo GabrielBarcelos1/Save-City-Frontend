@@ -217,7 +217,7 @@ function AddItem({ match }: RouteComponentProps<TParams>) {
                   fluid
                   selection
                   options={dropDownOptions}
-                  label="O seu problema te a ver com :"
+                  label="O seu problema tem a ver com:"
                   required
                   value={valueType}
                   onChange={handleChangeDropdownType}
